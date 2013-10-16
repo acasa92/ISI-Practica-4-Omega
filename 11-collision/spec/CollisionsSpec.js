@@ -93,30 +93,28 @@ describe("CollisionsSpec", function() {
 		expect(ctx).toBeDefined();
 	});
 
-<<<<<<< HEAD
+
 	it("Bola de fuego contra nave", function() {
-		var enemies = {
-	  		  basic: { x: 100, y: -50, sprite: 'enemy_purple', A: 0, F: 0  , E: 100 }
-		};
 		SpriteSheet = { 
 			map : {enemy_purple: { sx: 37, sy: 0, w: 42, h: 43, frames: 1 },
-				fireball: { sx: 0, sy: 64, w: 64, h: 64, frames: 1 }}
+				fireball: { sx: 0, sy: 64, w: 64, h: 64, frames: 1 },
+				explosion: { sx: 0, sy: 64, w: 64, h: 64, frames: 12 }}
 		};
 		var miBola = new PlayerFireball(1,2,1);
 		miBola.x=1;
 		miBola.y=2;
 		var pm = new Enemy(enemies.basic);
-		var board = new GameBoard();
-		spyOn(pm, "hit");
-		board.add(miBola);
-		board.add(pm);
 		pm.x=1;
 		pm.y=2;
+		var board = new GameBoard();
+
+		board.add(miBola);
+		board.add(pm);
+		
 		board.step(0.0000000001);
-		expect(pm.hit).toHaveBeenCalled();
+		expect(board.objects.length).toBe(2);
 		expect(board.objects[0]).toBe(miBola);
-		expect(board.objects[1]).toBe(pm);
-		//expect(board.objects.length).toBe(1);
+		expect(board.objects[1].sprite).toBe('explosion');
 
 	});
 	/*
@@ -143,11 +141,12 @@ describe("CollisionsSpec", function() {
 		expect(pm.hit).toHaveBeenCalled();
 		expect(board[0]).toBe(undefined);
 		expect(board[1]).toBe(undefined);
-=======
+=======*/
 	it("un misil destruye una nave", function() {
 		SpriteSheet.map = {
 					missile: {h:10, w:2},
-					enemy_purple: { sx: 37, sy: 0, w: 42, h: 43, frames: 1 }
+					enemy_purple: { sx: 37, sy: 0, w: 42, h: 43, frames: 1 },
+					explosion: { sx: 0, sy: 64, w: 64, h: 64, frames: 12 },
 		};
 
 		var gb = new GameBoard();
@@ -160,21 +159,15 @@ describe("CollisionsSpec", function() {
 		enem.y = 5;
 		enem.health = 10;
 
+
 		gb.add(misil);
 		gb.add(enem);
 
-		spyOn(enem,"hit"); 
 		gb.step(0.0001);
-		expect(enem.hit).toHaveBeenCalledWith(10);
-		expect(gb[misil]).toBe(undefined);
-		expect(gb[enem]).toBe(undefined);
-		
->>>>>>> f1371a59ca7c52e6304088064a2077e1af680352
+		expect(gb.objects.length).toBe(1);
+		expect(gb.objects[0].sprite).toBe('explosion');
 
 	});
-
-	});
-	*/
 
 
 });
