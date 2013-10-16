@@ -194,16 +194,16 @@ var PlayerShip = function() {
 	    this.reload = this.reloadTime;
 
 	    // Se añaden al gameboard 2 misiles 
-	    this.board.add(new PlayerFireball(this.x,this.y+this.h/2));
-	    this.board.add(new PlayerFireball(this.x+this.w,this.y+this.h/2));
+	    this.board.add(new PlayerFireball(this.x+this.w/2,this.y+this.h/2));
+	
 	}
 	if(this.newShootn() && this.reload < 0) {
 	    // Esta pulsada la tecla de disparo y ya ha pasado el tiempo reload
 	    this.reload = this.reloadTime;
 
 	    // Se añaden al gameboard 2 misiles 
-	    this.board.add(new PlayerFireball(this.x,this.y+this.h/2));
-	    this.board.add(new PlayerFireball(this.x+this.w,this.y+this.h/2));
+	    this.board.add(new PlayerFireball(this.x+this.w/2,this.y+this.h/2));
+	 
 	}
         
     }
