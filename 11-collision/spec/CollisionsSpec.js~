@@ -78,3 +78,49 @@
   jugador, desaparece.
 
 */
+
+describe("FireBallSpec", function() {
+
+	var canvas, ctx;
+
+	beforeEach(function(){
+		loadFixtures('index.html');
+
+		canvas = $('#game')[0];
+		expect(canvas).toExist();
+
+		ctx = canvas.getContext('2d');
+		expect(ctx).toBeDefined();
+	});
+
+	it("un misil destruye una nave", function() {
+		SpriteSheet.map = {
+					missile: {h:10, w:2},
+					enemy_purple: { sx: 37, sy: 0, w: 42, h: 43, frames: 1 }
+		};
+
+		var gb = new GameBoard();
+		var misil = new PlayerMissile(5,5);
+		misil.x = 5;
+		misil.y = 5;
+		misil.damage = 10;
+		var enem = new Enemy(enemies.basic);
+		enem.x = 5;
+		enem.y = 5;
+		enem.health = 10;
+
+		gb.add(misil);
+		gb.add(enem);
+
+		spyOn(enem,"hit"); 
+		gb.step(0.0001);
+		expect(enem.hit).toHaveBeenCalledWith(10);
+		expect(gb[misil]).toBe(undefined);
+		expect(gb[enem]).toBe(undefined);
+		
+
+	});
+
+
+
+});
