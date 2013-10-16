@@ -129,29 +129,25 @@ var PlayerShip = function() {
    this.newShoot = function() {
 	var shoot = false;
 	var pressesp = Game.keys['fire'];
-	
+
 	if(pressesp && !this.pressedesp) { shoot = true; };
-	
+
 	this.pressedesp = pressesp;
-	
 	return shoot;
     };
+
     this.newShootb = function() {
 	var shoot = false;
-	
 	var pressb = Game.keys['fireballb'];
-	
 	
 	if(pressb && !this.pressedb) { shoot = true; };
 	
-	
 	this.pressedb = pressb;
-	
 	return shoot;
     };
+
     this.newShootn = function() {
 	var shoot = false;
-	
 	var pressn = Game.keys['fireballn'];
 	
 	if(pressn && !this.pressedn) { shoot = true; };
@@ -223,14 +219,17 @@ PlayerMissile.prototype.step = function(dt)  {
     if(this.y < -this.h) { this.board.remove(this); }
 };
 
+
 var PlayerFireball = function(x,y,sentido) {
-    this.w = SpriteSheet.map['fireball'].w;
-    this.h = SpriteSheet.map['fireball'].h;
+    this.setup('fireball', { vy: -1500, sentido: sentido});
     this.x = x - this.w/2; 
-    this.sentido=sentido;
     this.y = y - this.h; 
-    this.vy = -1500;
+	
 };
+
+// Heredamos del prototipo new Sprite()
+PlayerFireball.prototype = new Sprite();
+
 PlayerFireball.prototype.step = function(dt)  {
     this.vx= 200*this.sentido;
     this.y += this.vy * dt;
@@ -239,9 +238,6 @@ PlayerFireball.prototype.step = function(dt)  {
     if(this.y < -this.h) { this.board.remove(this); }
 };
 
-PlayerFireball.prototype.draw = function(ctx)  {
-    SpriteSheet.draw(ctx,'fireball',this.x,this.y);
-};
 
 // Constructor para las naves enemigas. Un enemigo se define mediante
 // un conjunto de propiedades provenientes de 3 sitios distintos, que

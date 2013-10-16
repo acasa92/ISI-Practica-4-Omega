@@ -45,7 +45,7 @@ describe("FireBallSpec", function() {
 		SpriteSheet = { draw: function(ctx, name, x, y) {} };
 		spyOn(SpriteSheet, "draw");
 		pm.draw(ctx);
-		expect(SpriteSheet.draw).toHaveBeenCalledWith(ctx,'fireball', pm.x, pm.y, 0);
+		expect(SpriteSheet.draw).toHaveBeenCalledWith(ctx,'fireball', pm.x, pm.y);
 	});
 
 });
