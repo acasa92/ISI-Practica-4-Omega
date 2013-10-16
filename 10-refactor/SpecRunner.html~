@@ -26,8 +26,12 @@
   <script type="text/javascript" src="spec/PlayerShipSpec.js"></script>
   <script type="text/javascript" src="spec/GameBoardSpec.js"></script>
   <script type="text/javascript" src="spec/PlayerMissileSpec.js"></script>
+<<<<<<< HEAD
+  <script type="text/javascript" src="spec/SpriteSpec.js"></script>
+=======
   <script type="text/javascript" src="spec/EnemySpec.js"></script>
 
+>>>>>>> c8cf5adf5a17fec8b85fa54ecfdbeb61e2ffbb41
 
   <script type="text/javascript">
     (function() {

@@ -89,12 +89,15 @@ it("Enemyes.step()", function() {
 		spyOn(dummyBoard, "remove");
 	
 		//sin salirse de la pantalla
-
+		//var ytemp = pm.y;
+		//var dt = 1;
+		//while( dt > (-pm.h-pm.y)/pm.vy ) { dt /= 10; }; //independiente de pm.vy
 		pm.step(0.01);
 		//expect(pm.y).toBe(ytemp + pm.vy*dt);
 		expect(dummyBoard.remove).not.toHaveBeenCalled();
 		
 		//saliendose de la pantalla
+		//pm.step(1+(-pm.h-pm.y)/pm.vy); //independiente de pm.vy
 		pm.step(100000);
 		expect(dummyBoard.remove).toHaveBeenCalledWith(pm);
 	});
