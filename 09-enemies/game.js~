@@ -4,7 +4,8 @@ var sprites = {
     enemy_purple: { sx: 37, sy: 0, w: 42, h: 43, frames: 1 },
     enemy_bee: { sx: 79, sy: 0, w: 37, h: 43, frames: 1 },
     enemy_ship: { sx: 116, sy: 0, w: 42, h: 43, frames: 1 },
-    enemy_circle: { sx: 158, sy: 0, w: 32, h: 33, frames: 1 }
+    enemy_circle: { sx: 158, sy: 0, w: 32, h: 33, frames: 1 },
+    fireball: { sx: 0, sy: 64, w: 64, h: 64, frames: 1 }
 };
 
 
@@ -124,8 +125,9 @@ var PlayerShip = function() {
     this.x = Game.width/2 - this.w / 2;
     this.y = Game.height - 10 - this.h;
     this.vx = 0;
-    this.pressed = false;
-
+    this.pressedesp=false;
+    this.pressedb=false;
+    this.pressedn=false;
     this.reloadTime = 0.25;  // Un cuarto de segundo para poder volver a disparar
     this.reload = this.reloadTime;
 
@@ -133,13 +135,18 @@ var PlayerShip = function() {
 
     this.newShoot = function() {
 	var shoot = false;
-	var press = Game.keys['fire'];
-
-	if(press && !this.pressed) { shoot = true; };
-
-	this.pressed = press;
+	var pressesp = Game.keys['fire'];
+	var pressb = Game.keys['fireballb'];
+	var pressn = Game.keys['fireballn'];
+	if(pressesp && !this.pressedesp) { shoot = 'misil'; };
+	if(pressb && !this.pressedb) { shoot = 'bolafuegob'; };
+	if(pressn && !this.pressedn) { shoot = 'bolafuegon'; };
+	this.pressedesp = pressesp;
+	this.pressedb = pressb;
+	this.pressedn = pressn;
 	return shoot;
     };
+   
 
     this.step = function(dt) {
 	if(Game.keys['left']) { this.vx = -this.maxVel; }
@@ -154,15 +161,31 @@ var PlayerShip = function() {
 	}
 
 	this.reload-=dt;
-	if(this.newShoot() && this.reload < 0) {
+	if(this.newShoot()==='misil' && this.reload < 0) {
 	    // Esta pulsada la tecla de disparo y ya ha pasado el tiempo reload
-	    Game.keys['fire'] = false;
 	    this.reload = this.reloadTime;
 
 	    // Se añaden al gameboard 2 misiles 
 	    this.board.add(new PlayerMissile(this.x,this.y+this.h/2));
 	    this.board.add(new PlayerMissile(this.x+this.w,this.y+this.h/2));
 	}
+	if(this.newShoot()==='bolafuegob' && this.reload < 0) {
+	    // Esta pulsada la tecla de disparo y ya ha pasado el tiempo reload
+	    this.reload = this.reloadTime;
+
+	    // Se añaden al gameboard 2 misiles 
+	    this.board.add(new PlayerFireball(this.x,this.y+this.h/2));
+	    this.board.add(new PlayerFireball(this.x+this.w,this.y+this.h/2));
+	}
+	if(this.newShoot()==='bolafuegon' && this.reload < 0) {
+	    // Esta pulsada la tecla de disparo y ya ha pasado el tiempo reload
+	    this.reload = this.reloadTime;
+
+	    // Se añaden al gameboard 2 misiles 
+	    this.board.add(new PlayerFireball(this.x,this.y+this.h/2));
+	    this.board.add(new PlayerFireball(this.x+this.w,this.y+this.h/2));
+	}
+        
     }
 
     this.draw = function(ctx) {
@@ -193,6 +216,42 @@ PlayerMissile.prototype.draw = function(ctx)  {
 };
 
 
+PlayerMissile.prototype.step = function(dt)  {
+    this.y += this.vy * dt;
+    if(this.y < -this.h) { this.board.remove(this); }
+};
+
+PlayerMissile.prototype.draw = function(ctx)  {
+    SpriteSheet.draw(ctx,'missile',this.x,this.y);
+};
+
+
+var PlayerFireball = function(x,y) {
+    this.w = SpriteSheet.map['fireball'].w;
+    this.h = SpriteSheet.map['fireball'].h;
+    this.x = x - this.w/2; 
+
+    this.y = y - this.h; 
+    this.vy = -700;
+};
+PlayerFireball.prototype.step = function(dt)  {
+    this.y += this.vy * dt;
+    if(this.y < -this.h) { this.board.remove(this); }
+};
+
+PlayerFireball.prototype.draw = function(ctx)  {
+    SpriteSheet.draw(ctx,'fireball',this.x,this.y);
+};
+
+
+PlayerFireball.prototype.step = function(dt)  {
+    this.y += this.vy * dt;
+    if(this.y < -this.h) { this.board.remove(this); }
+};
+
+PlayerFireball.prototype.draw = function(ctx)  {
+    SpriteSheet.draw(ctx,'fireball',this.x,this.y);
+};
 
 // Constructor para las naves enemigas. Un enemigo se define mediante
 // un conjunto de propiedades provenientes de 3 sitios distintos, que

@@ -32,13 +32,15 @@ var Game = new function() {
     };
 
     // Gestión de la entrada (teclas para izda/derecha y disparo)
-    var KEY_CODES = { 37:'left', 39:'right', 32 :'fire' };
+    var KEY_CODES = { 37:'left', 39:'right', 32 :'fire', 66:'fireballb', 78: 'fireballn'};
     this.keys = {};
 
     this.setupInput = function() {
 	$(window).keydown(function(event){
 	    if (KEY_CODES[event.which]) {
+//		console.log('antes'+Game.keys['fireballb']);
 		Game.keys[KEY_CODES[event.which]] = true;
+//		console.log('despues'+Game.keys['fireballb']);
 		return false;
 	    }
 	});
