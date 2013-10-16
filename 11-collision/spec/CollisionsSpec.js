@@ -93,6 +93,7 @@ describe("CollisionsSpec", function() {
 		expect(ctx).toBeDefined();
 	});
 
+<<<<<<< HEAD
 	it("Bola de fuego contra nave", function() {
 		var enemies = {
 	  		  basic: { x: 100, y: -50, sprite: 'enemy_purple', A: 0, F: 0  , E: 100 }
@@ -142,7 +143,35 @@ describe("CollisionsSpec", function() {
 		expect(pm.hit).toHaveBeenCalled();
 		expect(board[0]).toBe(undefined);
 		expect(board[1]).toBe(undefined);
+=======
+	it("un misil destruye una nave", function() {
+		SpriteSheet.map = {
+					missile: {h:10, w:2},
+					enemy_purple: { sx: 37, sy: 0, w: 42, h: 43, frames: 1 }
+		};
 
+		var gb = new GameBoard();
+		var misil = new PlayerMissile(5,5);
+		misil.x = 5;
+		misil.y = 5;
+		misil.damage = 10;
+		var enem = new Enemy(enemies.basic);
+		enem.x = 5;
+		enem.y = 5;
+		enem.health = 10;
+
+		gb.add(misil);
+		gb.add(enem);
+
+		spyOn(enem,"hit"); 
+		gb.step(0.0001);
+		expect(enem.hit).toHaveBeenCalledWith(10);
+		expect(gb[misil]).toBe(undefined);
+		expect(gb[enem]).toBe(undefined);
+		
+>>>>>>> f1371a59ca7c52e6304088064a2077e1af680352
+
+	});
 
 	});
 	*/
