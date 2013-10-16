@@ -194,7 +194,7 @@ var PlayerShip = function() {
 	    this.reload = this.reloadTime;
 
 	    // Se añaden al gameboard 2 misiles 
-	    this.board.add(new PlayerFireball(this.x+this.w/2,this.y+this.h/2));
+	    this.board.add(new PlayerFireball(this.x+this.w/2,this.y+this.h/2,-1));
 	
 	}
 	if(this.newShootn() && this.reload < 0) {
@@ -202,7 +202,7 @@ var PlayerShip = function() {
 	    this.reload = this.reloadTime;
 
 	    // Se añaden al gameboard 2 misiles 
-	    this.board.add(new PlayerFireball(this.x+this.w/2,this.y+this.h/2));
+	    this.board.add(new PlayerFireball(this.x+this.w/2,this.y+this.h/2,1));
 	 
 	}
         
@@ -246,16 +246,19 @@ PlayerMissile.prototype.draw = function(ctx)  {
 };
 
 
-var PlayerFireball = function(x,y) {
+var PlayerFireball = function(x,y,sentido) {
     this.w = SpriteSheet.map['fireball'].w;
     this.h = SpriteSheet.map['fireball'].h;
     this.x = x - this.w/2; 
-
+    this.sentido=sentido;
     this.y = y - this.h; 
-    this.vy = -700;
+    this.vy = -1500;
 };
 PlayerFireball.prototype.step = function(dt)  {
+    this.vx= 200*this.sentido;
     this.y += this.vy * dt;
+    this.x += this.vx * dt;
+    this.vy += 150;
     if(this.y < -this.h) { this.board.remove(this); }
 };
 
@@ -263,15 +266,6 @@ PlayerFireball.prototype.draw = function(ctx)  {
     SpriteSheet.draw(ctx,'fireball',this.x,this.y);
 };
 
-
-PlayerFireball.prototype.step = function(dt)  {
-    this.y += this.vy * dt;
-    if(this.y < -this.h) { this.board.remove(this); }
-};
-
-PlayerFireball.prototype.draw = function(ctx)  {
-    SpriteSheet.draw(ctx,'fireball',this.x,this.y);
-};
 
 // Constructor para las naves enemigas. Un enemigo se define mediante
 // un conjunto de propiedades provenientes de 3 sitios distintos, que
