@@ -108,60 +108,7 @@ describe("Clase PlayerShip", function(){
 
     });
 
-	it("PlayerShip.newShoot()", function() {
-	var miNave = new PlayerShip();
-	//No pulsada y sin pulsar
-	Game = {keys: {'fire': false}};
-	miNave.pressed = false;
-	expect(miNave.newShoot()).toBe(false);
-	expect(miNave.pressed).toBe(false);
 
-	//No pulsada y pulsamos
-	Game = {keys: {'fire': true}};
-	miNave.pressed = false;
-	expect(miNave.newShoot()).toBe(true);
-	expect(miNave.pressed).toBe(true);
-
-	//Pulsada y pulsamos
-	Game = {keys: {'fire': true}};
-	miNave.pressed = true;
-	expect(miNave.newShoot()).toBe(false);
-	expect(miNave.pressed).toBe(true);
-    });
-
-    it("step con tecla espaciadora pulsada", function() {
-	Game = {width: 320, height: 480, 
-		keys: {'left': false, 'right': false, 'fire': true}};
-	SpriteSheet.map = {missile: {h:10, w:2}, ship: {h:10, w:2} };
-	var miNave = new PlayerShip();
-	var dummyBoard = { add: function() {} };
-	miNave.board = dummyBoard;
-
-	spyOn(dummyBoard, "add");
-	miNave.reload = -1;//pasa el tiempo de recarga
-	miNave.step(0.1);
-	expect(dummyBoard.add).toHaveBeenCalled();
-	
-	//después de haber pulsado y sin levantar todavía, varias veces
-	for (var i=0; i<3; i++) {
-		dummyBoard.add.reset();
-		miNave.reload = -1;
-		miNave.step(0.1);
-		expect(dummyBoard.add).not.toHaveBeenCalled();
-	}
-	
-	//después de soltar
-	Game.keys['fire'] = false;
-	miNave.reload = -1;
-	miNave.step(0.1);
-	expect(dummyBoard.add).not.toHaveBeenCalled();
-
-	//al volver a pulsar
-	Game.keys['fire'] = true;
-	miNave.reload = -1;
-	miNave.step(0.1);
-	expect(dummyBoard.add).toHaveBeenCalled();
-    });
 
 });
 
