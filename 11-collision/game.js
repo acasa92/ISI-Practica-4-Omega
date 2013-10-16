@@ -235,7 +235,7 @@ PlayerMissile.prototype.step = function(dt)  {
 
 
 var PlayerFireball = function(x,y,sentido) {
-    this.setup('fireball', { vy: -1500, sentido: sentido});
+    this.setup('fireball', { vy: -1500, sentido: sentido, damage: 100});
     this.x = x - this.w/2; 
     this.y = y - this.h; 
 	
@@ -243,13 +243,19 @@ var PlayerFireball = function(x,y,sentido) {
 
 // Heredamos del prototipo new Sprite()
 PlayerFireball.prototype = new Sprite();
+PlayerMissile.prototype.type = OBJECT_POWERUP;
 
 PlayerFireball.prototype.step = function(dt)  {
     this.vx= 200*this.sentido;
     this.y += this.vy * dt;
     this.x += this.vx * dt;
     this.vy += 150;
-    if(this.y < -this.h) { this.board.remove(this); }
+    var collision = this.board.collide(this,OBJECT_ENEMY);
+    if(collision) {
+	collision.hit(this.damage);
+    } else if(this.y < -this.h) { 
+         this.board.remove(this); 
+    }
 };
 
 

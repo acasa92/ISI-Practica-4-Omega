@@ -26,9 +26,7 @@ describe("FireBallSpec", function() {
 
 	it("FireBallSpec.step()", function() {
 		var pm = new PlayerFireball(1,1000,1);
-		var dummyBoard = { remove: function(obj) {},	
-				collide:function(){}
-		 };
+		var dummyBoard = { remove: function(obj) {} };
 		pm.board = dummyBoard;
 		spyOn(dummyBoard, "remove");
 	
