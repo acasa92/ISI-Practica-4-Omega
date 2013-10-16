@@ -112,21 +112,21 @@ describe("Clase PlayerShip", function(){
 	var miNave = new PlayerShip();
 	//No pulsada y sin pulsar
 	Game = {keys: {'fire': false}};
-	miNave.pressed = false;
+	miNave.pressedesp = false;
 	expect(miNave.newShoot()).toBe(false);
-	expect(miNave.pressed).toBe(false);
+	expect(miNave.pressedesp).toBe(false);
 
 	//No pulsada y pulsamos
 	Game = {keys: {'fire': true}};
-	miNave.pressed = false;
+	miNave.pressedesp = false;
 	expect(miNave.newShoot()).toBe(true);
-	expect(miNave.pressed).toBe(true);
+	expect(miNave.pressedesp).toBe(true);
 
 	//Pulsada y pulsamos
 	Game = {keys: {'fire': true}};
-	miNave.pressed = true;
+	miNave.pressedesp = true;
 	expect(miNave.newShoot()).toBe(false);
-	expect(miNave.pressed).toBe(true);
+	expect(miNave.pressedesp).toBe(true);
     });
 
     it("step con tecla espaciadora pulsada", function() {

@@ -13,7 +13,7 @@ var enemies = {
     // B, C y E substituirán a los valores por defecto definidos en la
     // variable baseParameters del constructor Enemy(). Ver
     // comentarios en el código del constructor al final del fichero.
-    basic: { x: 100, y: -50, sprite: 'enemy_purple', B: 0, F: 0 , E: 100 }
+    basic: { x: 100, y: -50, sprite: 'enemy_purple', A: 0, F: 0  , E: 100 }
 
 };
 
@@ -136,13 +136,33 @@ var PlayerShip = function() {
     this.newShoot = function() {
 	var shoot = false;
 	var pressesp = Game.keys['fire'];
-	var pressb = Game.keys['fireballb'];
-	var pressn = Game.keys['fireballn'];
-	if(pressesp && !this.pressedesp) { shoot = 'misil'; };
-	if(pressb && !this.pressedb) { shoot = 'bolafuegob'; };
-	if(pressn && !this.pressedn) { shoot = 'bolafuegon'; };
+	
+	if(pressesp && !this.pressedesp) { shoot = true; };
+	
 	this.pressedesp = pressesp;
+	
+	return shoot;
+    };
+    this.newShootb = function() {
+	var shoot = false;
+	
+	var pressb = Game.keys['fireballb'];
+	
+	
+	if(pressb && !this.pressedb) { shoot = true; };
+	
+	
 	this.pressedb = pressb;
+	
+	return shoot;
+    };
+    this.newShootn = function() {
+	var shoot = false;
+	
+	var pressn = Game.keys['fireballn'];
+	
+	if(pressn && !this.pressedn) { shoot = true; };
+	
 	this.pressedn = pressn;
 	return shoot;
     };
@@ -161,7 +181,7 @@ var PlayerShip = function() {
 	}
 
 	this.reload-=dt;
-	if(this.newShoot()==='misil' && this.reload < 0) {
+	if(this.newShoot() && this.reload < 0) {
 	    // Esta pulsada la tecla de disparo y ya ha pasado el tiempo reload
 	    this.reload = this.reloadTime;
 
@@ -169,21 +189,21 @@ var PlayerShip = function() {
 	    this.board.add(new PlayerMissile(this.x,this.y+this.h/2));
 	    this.board.add(new PlayerMissile(this.x+this.w,this.y+this.h/2));
 	}
-	if(this.newShoot()==='bolafuegob' && this.reload < 0) {
+	if(this.newShootb() && this.reload < 0) {
 	    // Esta pulsada la tecla de disparo y ya ha pasado el tiempo reload
 	    this.reload = this.reloadTime;
 
 	    // Se añaden al gameboard 2 misiles 
-	    this.board.add(new PlayerFireball(this.x,this.y+this.h/2));
-	    this.board.add(new PlayerFireball(this.x+this.w,this.y+this.h/2));
+	    this.board.add(new PlayerFireball(this.x+this.w/2,this.y+this.h/2));
+	
 	}
-	if(this.newShoot()==='bolafuegon' && this.reload < 0) {
+	if(this.newShootn() && this.reload < 0) {
 	    // Esta pulsada la tecla de disparo y ya ha pasado el tiempo reload
 	    this.reload = this.reloadTime;
 
 	    // Se añaden al gameboard 2 misiles 
-	    this.board.add(new PlayerFireball(this.x,this.y+this.h/2));
-	    this.board.add(new PlayerFireball(this.x+this.w,this.y+this.h/2));
+	    this.board.add(new PlayerFireball(this.x+this.w/2,this.y+this.h/2));
+	 
 	}
         
     }
