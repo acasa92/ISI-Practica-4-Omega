@@ -81,8 +81,7 @@ it("Enemyes.step()", function() {
 			map : {enemy_purple: { sx: 37, sy: 0, w: 42, h: 43, frames: 1 }}
 		};
 		var dummyBoard = { 
-			remove: function(obj) {} ,
-			collide: function(){}
+			remove: function(obj) {} 
 		};
 		
 		var pm = new Enemy(enemies.basic);

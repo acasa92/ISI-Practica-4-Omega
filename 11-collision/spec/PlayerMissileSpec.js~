@@ -56,7 +56,7 @@ describe("PlayerMissile", function() {
 
 	it("PlayerMissile.step()", function() {
 		var pm = new PlayerMissile(1,1000);
-		var dummyBoard = { remove: function(obj) {} , collide: function(){}};
+		var dummyBoard = { remove: function(obj) {} };
 		pm.board = dummyBoard;
 		spyOn(dummyBoard, "remove");
 	
