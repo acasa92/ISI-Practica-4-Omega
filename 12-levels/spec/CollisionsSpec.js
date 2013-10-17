@@ -145,7 +145,8 @@ describe("CollisionsSpec", function() {
 		board.add(pm);
 
 		board.step(0.0000000001);
-		expect(board.objects.length).toBe(0);
+		expect(board.objects.length).toBe(1);
+	        expect(board.objects[0].sprite).toBe('explosion');
 	});
 	
 	it("un misil destruye una nave", function() {
