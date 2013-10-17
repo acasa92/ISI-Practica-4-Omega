@@ -5,7 +5,8 @@ var sprites = {
     enemy_bee: { sx: 79, sy: 0, w: 37, h: 43, frames: 1 },
     enemy_ship: { sx: 116, sy: 0, w: 42, h: 43, frames: 1 },
     enemy_circle: { sx: 158, sy: 0, w: 32, h: 33, frames: 1 },
-    explosion: { sx: 0, sy: 64, w: 64, h: 64, frames: 12 }
+    explosion: { sx: 0, sy: 64, w: 64, h: 64, frames: 12 },
+    fireball: { sx: 0, sy: 64, w: 64, h: 64, frames: 1 }
 };
 
 var enemies = {
@@ -225,6 +226,40 @@ var PlayerShip = function() {
     this.x = Game.width/2 - this.w / 2;
     this.y = Game.height - 10 - this.h;
 
+    this.pressedesp=false;
+    this.pressedb=false;
+    this.pressedn=false;
+
+   this.newShoot = function() {
+	var shoot = false;
+	var pressesp = Game.keys['fire'];
+
+	if(pressesp && !this.pressedesp) { shoot = true; };
+
+	this.pressedesp = pressesp;
+	return shoot;
+    };
+
+    this.newShootb = function() {
+	var shoot = false;
+	var pressb = Game.keys['fireballb'];
+	
+	if(pressb && !this.pressedb) { shoot = true; };
+	
+	this.pressedb = pressb;
+	return shoot;
+    };
+
+    this.newShootn = function() {
+	var shoot = false;
+	var pressn = Game.keys['fireballn'];
+	
+	if(pressn && !this.pressedn) { shoot = true; };
+	
+	this.pressedn = pressn;
+	return shoot;
+    };
+    
     this.step = function(dt) {
 	if(Game.keys['left']) { this.vx = -this.maxVel; }
 	else if(Game.keys['right']) { this.vx = this.maxVel; }
@@ -234,20 +269,35 @@ var PlayerShip = function() {
 
 	if(this.x < 0) { this.x = 0; }
 	else if(this.x > Game.width - this.w) { 
-	    this.x = Game.width - this.w;
+	    this.x = Game.width - this.w 
 	}
 
 	this.reload-=dt;
-	if(Game.keys['fire'] && this.reload < 0) {
+	if(this.newShoot() && this.reload < 0) {
 	    // Esta pulsada la tecla de disparo y ya ha pasado el tiempo reload
-	    Game.keys['fire'] = false;
 	    this.reload = this.reloadTime;
 
 	    // Se añaden al gameboard 2 misiles 
 	    this.board.add(new PlayerMissile(this.x,this.y+this.h/2));
 	    this.board.add(new PlayerMissile(this.x+this.w,this.y+this.h/2));
 	}
-    };
+	if(this.newShootb() && this.reload < 0) {
+	    // Esta pulsada la tecla de disparo y ya ha pasado el tiempo reload
+	    this.reload = this.reloadTime;
+
+	    // Se añaden al gameboard 2 misiles 
+	    this.board.add(new PlayerFireball(this.x+this.w/2,this.y+this.h/2,-1));
+	
+	}
+	if(this.newShootn() && this.reload < 0) {
+	    // Esta pulsada la tecla de disparo y ya ha pasado el tiempo reload
+	    this.reload = this.reloadTime;
+
+	    // Se añaden al gameboard 2 misiles 
+	    this.board.add(new PlayerFireball(this.x+this.w/2,this.y+this.h/2,1));
+	 
+	}
+    }
 };
 
 // Heredamos del prototipo new Sprite()
@@ -256,10 +306,11 @@ PlayerShip.prototype.type = OBJECT_PLAYER;
 
 // Llamada cuando una nave enemiga colisiona con la nave del usuario
 PlayerShip.prototype.hit = function(damage) {
-    if(this.board.remove(this)) {
-    	
-	loseGame();
-    }
+
+    this.board.add(new Explosion(this.x + this.w/2, 
+                                     this.y + this.h/2,true));
+  
+    this.board.remove(this);
 };
 
 
@@ -287,7 +338,29 @@ PlayerMissile.prototype.step = function(dt)  {
     }
 };
 
+var PlayerFireball = function(x,y,sentido) {
+    this.setup('fireball', { vy: -1500, sentido: sentido, damage: 100});
+    this.x = x - this.w/2; 
+    this.y = y - this.h; 
+	
+};
 
+// Heredamos del prototipo new Sprite()
+PlayerFireball.prototype = new Sprite();
+PlayerMissile.prototype.type = OBJECT_POWERUP;
+
+PlayerFireball.prototype.step = function(dt)  {
+    this.vx= 200*this.sentido;
+    this.y += this.vy * dt;
+    this.x += this.vx * dt;
+    this.vy += 150;
+    var collision = this.board.collide(this,OBJECT_ENEMY);
+    if(collision) {
+	collision.hit(this.damage);
+    } else if(this.y < -this.h) { 
+         this.board.remove(this); 
+    }
+};
 // Constructor para las naves enemigas. Un enemigo se define mediante
 // un conjunto de propiedades provenientes de 3 sitios distintos, que
 // se aplican  este orden:
@@ -385,11 +458,12 @@ Enemy.prototype.hit = function(damage) {
 
 // Constructor para la explosión
 
-var Explosion = function(centerX,centerY) {
+var Explosion = function(centerX,centerY, isPlayer) {
     this.setup('explosion', { frame: 0 });
     this.x = centerX - this.w/2;
     this.y = centerY - this.h/2;
     this.subFrame = 0;
+    this.isPlayer=isPlayer;
 };
 
 Explosion.prototype = new Sprite();
@@ -398,6 +472,7 @@ Explosion.prototype.step = function(dt) {
     this.frame = Math.floor(this.subFrame++ / 2);
     if(this.subFrame >= 24) {
 	this.board.remove(this);
+	if(this.isPlayer) { loseGame();}
     }
 }
 
