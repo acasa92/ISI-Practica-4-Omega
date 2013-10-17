@@ -79,7 +79,7 @@ var level1 = [
     [ 22000,    25000, 400,         'wiggle',   { x: 100 } ]
 ];
 
-var level1 = [
+var level2 = [
   //  Comienzo, Fin,   Frecuencia,  Tipo,       Override
     [ 0,        4000,  500,         'step'                 ],
     [ 6000,     13000, 800,         'ltr'                  ],
@@ -304,19 +304,13 @@ var PlayerShip = function() {
 PlayerShip.prototype = new Sprite();
 PlayerShip.prototype.type = OBJECT_PLAYER;
 
-// Llamada cuando una nave enemiga colisiona con la nave del usuario//////////////////////////////////////////////////////////////////////////7
+// Llamada cuando una nave enemiga colisiona con la nave del usuario
 PlayerShip.prototype.hit = function(damage) {
-<<<<<<< HEAD
-    if(this.board.remove(this)) {
-    	
-	loseGame();
-    }
-=======
+
     this.board.add(new Explosion(this.x + this.w/2, 
                                      this.y + this.h/2,true));
   
     this.board.remove(this);
->>>>>>> 2392aa37dc9d885d63473f0b2780b4d13190d7b2
 };
 
 
