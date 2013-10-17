@@ -117,31 +117,28 @@ describe("CollisionsSpec", function() {
 		expect(board.objects[1].sprite).toBe('explosion');
 
 	});
-	/*
+	
 	it("Nave contra PlayerShip", function() {
-		var enemies = {
-	  		  basic: { x: 100, y: -50, sprite: 'enemy_purple', A: 0, F: 0  , E: 100 }
-		};
 		SpriteSheet = { 
 			map : {enemy_purple: { sx: 37, sy: 0, w: 42, h: 43, frames: 1 },
-				ship: { sx: 0, sy: 0, w: 37, h: 42, frames: 1 }}
+				ship: { sx: 0, sy: 0, w: 37, h: 42, frames: 1 },
+				explosion: { sx: 0, sy: 64, w: 64, h: 64, frames: 12 }}
 		};
 		var miShip = new PlayerShip();
 		miShip.x=1;
 		miShip.y=2;
 		var pm = new Enemy(enemies.basic);
+		pm.x=1;
+		pm.y=2;
 		var board = new GameBoard();
-		spyOn(pm, "hit");
+		
 		board.add(miShip);
 		board.add(pm);
 
-		pm.x=1;
-		pm.y=2;
 		board.step(0.0000000001);
-		expect(pm.hit).toHaveBeenCalled();
-		expect(board[0]).toBe(undefined);
-		expect(board[1]).toBe(undefined);
-=======*/
+		expect(board.objects.length).toBe(0);
+	});
+	
 	it("un misil destruye una nave", function() {
 		SpriteSheet.map = {
 					missile: {h:10, w:2},
@@ -166,6 +163,34 @@ describe("CollisionsSpec", function() {
 		gb.step(0.0001);
 		expect(gb.objects.length).toBe(1);
 		expect(gb.objects[0].sprite).toBe('explosion');
+
+	});
+	
+	it("un misil no destruye una nave", function() {
+		SpriteSheet.map = {
+					missile: {h:10, w:2},
+					enemy_purple: { sx: 37, sy: 0, w: 42, h: 43, frames: 1 },
+					explosion: { sx: 0, sy: 64, w: 64, h: 64, frames: 12 },
+		};
+
+		var gb = new GameBoard();
+		var misil = new PlayerMissile(5,5);
+		misil.x = 5;
+		misil.y = 5;
+		misil.damage = 10;
+		var enem = new Enemy(enemies.basic);
+		enem.x = 5;
+		enem.y = 5;
+		enem.health = 20;
+
+
+		gb.add(misil);
+		gb.add(enem);
+
+		gb.step(0.0001);
+		expect(gb.objects.length).toBe(1);
+		expect(gb.objects[0]).toBe(enem);
+		expect(enem.health).toBe(10);
 
 	});
 
