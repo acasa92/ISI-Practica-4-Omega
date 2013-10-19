@@ -61,7 +61,6 @@ describe("GameBoard", function() {
 
 	var gb;
 	var canvas, ctx;
-	var SpriteSheetOrig, GameOrig;
 
 	beforeEach(function(){
 		loadFixtures('index.html');
@@ -73,14 +72,6 @@ describe("GameBoard", function() {
 		expect(ctx).toBeDefined();
 
 		gb = new GameBoard();
-		SpriteSheetOrig = SpriteSheet;
-		GameOrig = Game;
-
-	});
-
-	afterEach(function() {
-		SpriteSheet = SpriteSheetOrig;
-		Game = GameOrig;
 	});
 
 	it("Gameboard.add()", function() {

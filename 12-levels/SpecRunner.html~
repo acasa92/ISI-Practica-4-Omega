@@ -19,6 +19,7 @@
 
   <!-- include spec files here... -->
   <script type="text/javascript" src="spec/spritesheetSpec.js"></script>
+  <script type="text/javascript" src="spec/LevelSpec.js"></script>
   <script type="text/javascript" src="spec/gameSpec.js"></script>
   <script type="text/javascript" src="spec/StarfieldSpec.js"></script>
   <script type="text/javascript" src="spec/TitleScreenSpec.js"></script>
@@ -29,7 +30,6 @@
   <script type="text/javascript" src="spec/EnemySpec.js"></script>
   <script type="text/javascript" src="spec/FireBallSpec.js"></script>
   <script type="text/javascript" src="spec/CollisionsSpec.js"></script>
-
 
   <script type="text/javascript">
     (function() {

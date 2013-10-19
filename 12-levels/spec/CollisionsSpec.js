@@ -82,6 +82,7 @@
 describe("CollisionsSpec", function() {
 
 	var canvas, ctx;
+	var SpriteSheetOrig, GameOrig;
 	var enemies = {
    		 basic: { x: 100, y: -50, sprite: 'enemy_purple', B: 100, C: 4, E: 100, health: 20 }
 	};
@@ -93,7 +94,14 @@ describe("CollisionsSpec", function() {
 
 		ctx = canvas.getContext('2d');
 		expect(ctx).toBeDefined();
+		SpriteSheetOrig = SpriteSheet;
+		GameOrig = Game;
 
+	});
+
+	afterEach(function() {
+		SpriteSheet = SpriteSheetOrig;
+		Game = GameOrig;
 	});
 
 
@@ -150,10 +158,12 @@ describe("CollisionsSpec", function() {
 	});
 	
 	it("un misil destruye una nave", function() {
-		SpriteSheet.map = {
+		SpriteSheet = {
+				map : {
 					missile: {h:10, w:2},
 					enemy_purple: { sx: 37, sy: 0, w: 42, h: 43, frames: 1 },
 					explosion: { sx: 0, sy: 64, w: 64, h: 64, frames: 12 },
+				}
 		};
 
 		var gb = new GameBoard();
@@ -177,10 +187,12 @@ describe("CollisionsSpec", function() {
 	});
 	
 	it("un misil no destruye una nave", function() {
-		SpriteSheet.map = {
+		SpriteSheet = {
+				map : {
 					missile: {h:10, w:2},
 					enemy_purple: { sx: 37, sy: 0, w: 42, h: 43, frames: 1 },
 					explosion: { sx: 0, sy: 64, w: 64, h: 64, frames: 12 },
+				}
 		};
 
 		var gb = new GameBoard();

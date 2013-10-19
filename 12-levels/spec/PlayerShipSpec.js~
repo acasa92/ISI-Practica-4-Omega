@@ -22,7 +22,7 @@ describe("Clase PlayerShip", function(){
     });
 
     afterEach(function() {
-	SpriteSheet = SpriteSheetOrig;
+	//SpriteSheet = SpriteSheetOrig;
 	Game = GameOrig;
     });
 

@@ -68,6 +68,7 @@ describe("LevelSpec", function() {
 	];
 
 	var callback = function() {};
+	var SpriteSheetOrig, GameOrig;
 
 	beforeEach(function(){
 		loadFixtures('index.html');
@@ -77,8 +78,16 @@ describe("LevelSpec", function() {
 
 		ctx = canvas.getContext('2d');
 		expect(ctx).toBeDefined();
+		SpriteSheetOrig = SpriteSheet;
+		GameOrig = Game;
 
 	});
+
+	afterEach(function() {
+		SpriteSheet = SpriteSheetOrig;
+		Game = GameOrig;
+	});
+
 
 	it("level constructor", function() {
 		var lv = new Level(dummyLevel, callback);
@@ -89,8 +98,7 @@ describe("LevelSpec", function() {
 
 	it("level.step()", function() {
 
-		SpriteSheet = {
-			map: {
+		SpriteSheet.map = {
 				ship: { sx: 0, sy: 0, w: 37, h: 42, frames: 1 },
 				missile: { sx: 0, sy: 30, w: 2, h: 10, frames: 1 },
 				enemy_purple: { sx: 37, sy: 0, w: 42, h: 43, frames: 1 },
@@ -99,7 +107,6 @@ describe("LevelSpec", function() {
 				enemy_circle: { sx: 158, sy: 0, w: 32, h: 33, frames: 1 },
 				explosion: { sx: 0, sy: 64, w: 64, h: 64, frames: 12 },
 				fireball: { sx: 0, sy: 64, w: 64, h: 64, frames: 1 }
-			}
 		};
 
 		var lv = new Level(dummyLevel, callback);
@@ -141,5 +148,6 @@ describe("LevelSpec", function() {
 		expect(lv.callback).toHaveBeenCalled();
 
 	});
+
 	
 });

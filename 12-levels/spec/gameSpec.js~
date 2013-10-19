@@ -31,7 +31,7 @@ describe("Game singleton", function(){
 	    SpriteSheet.draw(Game.ctx,"enemy_ship",150,150);
 	    SpriteSheet.draw(Game.ctx,"enemy_circle",150,200);
 	}
-	SpriteSheetOrig = SpriteSheet;
+    	SpriteSheetOrig = SpriteSheet;
 	GameOrig = Game;
 
     });

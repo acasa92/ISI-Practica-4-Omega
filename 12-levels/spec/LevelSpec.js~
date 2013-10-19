@@ -68,6 +68,7 @@ describe("LevelSpec", function() {
 	];
 
 	var callback = function() {};
+	var SpriteSheetOrig, GameOrig;
 
 	beforeEach(function(){
 		loadFixtures('index.html');
@@ -77,7 +78,47 @@ describe("LevelSpec", function() {
 
 		ctx = canvas.getContext('2d');
 		expect(ctx).toBeDefined();
+		SpriteSheetOrig = SpriteSheet;
+		GameOrig = Game;
 
+	});
+
+	afterEach(function() {
+		SpriteSheet = SpriteSheetOrig;
+		Game = GameOrig;
+	});
+
+	it("tras el nivel 1 aparece el 2", function() {
+		Game.keys['right'] = true;
+		Game.canvas = document.getElementById("game");
+		Game.width = Game.canvas.width;
+		Game.height= Game.canvas.height;
+
+		Game.ctx = Game.canvas.getContext && Game.canvas.getContext('2d');
+
+		SpriteSheet.load(sprites,startGame);
+		expect(Game.boards.length).toBe(4);
+		Game.keys['fire'] = true;
+
+		/*var loop = function() { 
+			// segundos transcurridos
+			var dt = 30 / 1000;
+
+			// Para cada board, de 0 en adelante, se 
+			// llama a su método step() y luego a draw()
+			for(var i=0,len = boards.length;i<len;i++) {
+	   			if(boards[i]) { 
+					boards[i].step(dt);
+					boards[i].draw(Game.ctx);
+	   			}
+			}
+			if(boards[4].levelData.length === 0 && this.board.cnt[OBJECT_ENEMY] === 0) {
+				break;
+   			 }
+    	};*/
+		
+		
+		
 	});
 
 	it("level constructor", function() {
@@ -89,8 +130,7 @@ describe("LevelSpec", function() {
 
 	it("level.step()", function() {
 
-		SpriteSheet = {
-			map: {
+		SpriteSheet.map = {
 				ship: { sx: 0, sy: 0, w: 37, h: 42, frames: 1 },
 				missile: { sx: 0, sy: 30, w: 2, h: 10, frames: 1 },
 				enemy_purple: { sx: 37, sy: 0, w: 42, h: 43, frames: 1 },
@@ -99,7 +139,6 @@ describe("LevelSpec", function() {
 				enemy_circle: { sx: 158, sy: 0, w: 32, h: 33, frames: 1 },
 				explosion: { sx: 0, sy: 64, w: 64, h: 64, frames: 12 },
 				fireball: { sx: 0, sy: 64, w: 64, h: 64, frames: 1 }
-			}
 		};
 
 		var lv = new Level(dummyLevel, callback);
@@ -141,5 +180,6 @@ describe("LevelSpec", function() {
 		expect(lv.callback).toHaveBeenCalled();
 
 	});
+
 	
 });

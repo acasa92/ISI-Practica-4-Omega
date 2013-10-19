@@ -95,7 +95,7 @@ describe("Enemyes", function() {
 			collide: function(){}
 		};
 		
-		Game = {width: 320, height: 480};
+		Game = {width: 320, height:};
 
 		var pm = new Enemy(enemies.basic);
 		pm.board = dummyBoard;
