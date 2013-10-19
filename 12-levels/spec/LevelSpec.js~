@@ -153,8 +153,8 @@ describe("LevelSpec", function() {
 	});
 
 	it("tras el nivel 1 aparece el 2", function() {
-		var level1 = [[ 0,        1000,  500,         'step'],];
-		var level2 = [[ 0,        500,  500,         'step'],];
+		level1 = [[ 0,        1000,  500,         'step'],];
+		level2 = [[ 0,        500,  500,         'step'],];
 
 		Game.keys['right'] = true;
 		Game.canvas = document.getElementById("game");
@@ -162,6 +162,62 @@ describe("LevelSpec", function() {
 		Game.height= Game.canvas.height;
 		SpriteSheet.load(sprites,startGame);
 		spyOn(window, "playGame").andCallThrough();
+		spyOn(window, "winGame").andCallThrough();
+		spyOn(window, "nextGame").andCallThrough();
+		spyOn(window, "playNextGame").andCallThrough();
+		Game.loop(); //Empieza el bucle
+		expect(window.playGame).not.toHaveBeenCalled(); //todavia no empieza a jugar
+		Game.keys['fire'] = false;
+		waits(100);
+
+		runs(function(){
+			expect(window.nextGame).not.toHaveBeenCalled();
+			Game.keys['fire'] = true;//pulsamos tecla para empezar
+			waits(100);
+		});
+		
+
+		runs(function(){
+			expect(window.playGame).toHaveBeenCalled();//empieza el nivel 1
+			Game.keys['fire'] = false;//se suelta la tecla fire para solo
+									//tener que pulsarla en el siguiente nivel
+			waits(level1[level1.length-1][1]+13000);
+		});
+		
+		
+		runs(function() {
+			expect(window.nextGame).toHaveBeenCalled();//se acaba el primer nivel
+			waits(100);
+		});
+		
+
+		runs(function(){
+			expect(window.winGame).not.toHaveBeenCalled();
+			expect(window.playNextGame).not.toHaveBeenCalled(); //todavia no empieza a jugar
+			Game.keys['fire'] = true;//pulsamos para empezar el segundo nivel
+			waits(100);
+		});
+
+		runs(function(){
+			expect(window.playNextGame).toHaveBeenCalled();//empieza el siguiente nivel
+			Game.keys['fire'] = false;
+			waits(level2[level2.length-1][1]+13000);
+		});
+
+		
+		runs(function() {
+			expect(window.winGame).toHaveBeenCalled();//se acaba el juego/ganamos
+		});
+	});
+
+	it("tras morir informa de que hemos perdido", function() {
+
+		Game.canvas = document.getElementById("game");
+		Game.width = Game.canvas.width;
+		Game.height= Game.canvas.height;
+		SpriteSheet.load(sprites,startGame);
+		spyOn(window, "playGame").andCallThrough();
+		spyOn(window, "loseGame");
 		Game.loop(); //Empieza el bucle
 		expect(window.playGame).not.toHaveBeenCalled(); //todavia no empieza a jugar
 		Game.keys['fire'] = false;
@@ -169,42 +225,23 @@ describe("LevelSpec", function() {
 
 		runs(function(){
 			Game.keys['fire'] = true;//pulsamos tecla para empezar
+			waits(100);
 		});
-		waits(100);
 
 		runs(function(){
 			expect(window.playGame).toHaveBeenCalled();//empieza el nivel 1
 			Game.keys['fire'] = false;//se suelta la tecla fire para solo
 									//tener que pulsarla en el siguiente nivel
+			waits(13000);
 		});
+
 		
-		spyOn(window, "nextGame").andCallThrough();
-		waits(level1[level1.length-1][1]+13000);
 		
 		runs(function() {
-			expect(window.nextGame).toHaveBeenCalled();//se acaba el primer nivel
+			expect(window.loseGame).toHaveBeenCalled();//la nave ha colisionado
 		});
 		
-		spyOn(window, "playNextGame").andCallThrough();
-		waits(100);
-
-		runs(function(){
-			expect(window.playNextGame).not.toHaveBeenCalled(); //todavia no empieza a jugar
-			Game.keys['fire'] = true;//pulsamos para empezar el segundo nivel
-		});
-		waits(100);
-
-		runs(function(){
-			expect(window.playNextGame).toHaveBeenCalled();//empieza el siguiente nivel
-			Game.keys['fire'] = false;
-		});
-
-		spyOn(window, "winGame").andCallThrough();
-		waits(level2[level2.length-1][1]+13000);
 		
-		runs(function() {
-			expect(window.winGame).toHaveBeenCalled();//se acaba el juego/ganamos
-		});
 	});
 	
 });
